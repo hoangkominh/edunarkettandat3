@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EduMarket - Sàn trung gian dịch vụ cho sinh viên: tài liệu, gia sư, luyện thi, kỹ năng, PT Gym, thực phẩm. Thanh toán qua Escrow an toàn.">
+  <title>EduMarket - Sàn dịch vụ cho sinh viên</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== THANH ĐIỀU HƯỚNG ===== -->
+  <header class="topbar">
+    <div class="nav-wrap">
+      <a class="brand" href="#market">EduMarket</a>
+      <nav class="nav" aria-label="Điều hướng chính">
+        <button type="button" class="nav-btn" data-view="market">Khám phá</button>
+        <button type="button" class="nav-btn" data-view="forum">Diễn đàn</button>
+        <button type="button" class="nav-btn" data-view="orders">Đơn &amp; Escrow</button>
+        <button type="button" class="nav-btn" data-view="chat">Tin nhắn</button>
+        <button type="button" class="nav-btn" data-view="post">Đăng dịch vụ</button>
+        <button type="button" class="nav-btn" data-view="admin">Quản trị</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ===== 1. KHÁM PHÁ (TRANG CHỦ) ===== -->
+    <section id="view-market" class="view">
+      <div class="hero">
+        <div class="hero-inner">
+          <h1>Dịch vụ cho sinh viên. Tiền được giữ an toàn.</h1>
+          <p>Tài liệu, gia sư, luyện thi, tiểu luận, PT Gym và thực phẩm. Tiền nằm trong Escrow cho tới khi bạn nghiệm thu.</p>
+          <a class="btn" href="#listing">Khám phá dịch vụ</a>
+        </div>
+      </div>
+
+      <h2 class="section-title">Bạn đang cần gì hôm nay?</h2>
+      <div id="goals" class="goals"></div>
+
+      <div class="filters">
+        <label class="sr-only" for="search">Tìm kiếm dịch vụ</label>
+        <input id="search" type="search" placeholder="Tìm kiếm dịch vụ, môn học, kỹ năng..." autocomplete="off">
+        <label class="sr-only" for="sort">Sắp xếp</label>
+        <select id="sort">
+          <option value="default">Mặc định</option>
+          <option value="price-asc">Giá: thấp → cao</option>
+          <option value="price-desc">Giá: cao → thấp</option>
+          <option value="rating">Đánh giá cao nhất</option>
+        </select>
+      </div>
+
+      <div id="chips" class="chips" role="group" aria-label="Lọc theo danh mục"></div>
+      <p id="result-count" class="muted small"></p>
+      <div id="listing" class="grid"></div>
+    </section>
+
+    <!-- ===== 2. DIỄN ĐÀN ===== -->
+    <section id="view-forum" class="view" hidden>
+      <h2 class="section-title">Diễn đàn: đăng nhu cầu &amp; đấu thầu báo giá</h2>
+      <p class="muted">Sinh viên đăng nhu cầu kèm ngân sách. Người làm gửi báo giá. Người đăng bấm <strong>"Tạo đơn Escrow"</strong> để tiền được sàn bảo vệ.</p>
+
+      <div class="form-card">
+        <h3>Đăng nhu cầu mới</h3>
+        <form id="forum-form" novalidate>
+          <label class="field"><span>Tiêu đề nhu cầu</span>
+            <input name="title" type="text" maxlength="120" required>
+          </label>
+          <label class="field"><span>Danh mục</span>
+            <select id="forum-category" name="category"></select>
+          </label>
+          <label class="field"><span>Ngân sách (đ)</span>
+            <input name="budget" type="number" min="1000" step="1000" required>
+          </label>
+          <label class="field"><span>Thời hạn (VD: 3 ngày, 15/11)</span>
+            <input name="deadline" type="text" maxlength="60">
+          </label>
+          <label class="field"><span>Mô tả chi tiết</span>
+            <textarea name="desc" rows="3" maxlength="1000"></textarea>
+          </label>
+          <button type="submit" class="btn">Đăng nhu cầu</button>
+        </form>
+      </div>
+
+      <div id="posts" class="stack"></div>
+    </section>
+
+    <!-- ===== 3. ĐƠN HÀNG & ESCROW ===== -->
+    <section id="view-orders" class="view" hidden>
+      <h2 class="section-title">Đơn hàng &amp; Escrow</h2>
+      <p class="muted">Luồng 4 bước: Đặt đơn &amp; nạp Escrow → Sàn giữ tiền → Người bán bàn giao → Nghiệm thu &amp; giải ngân (đã trừ hoa hồng).</p>
+      <div id="orders" class="stack"></div>
+    </section>
+
+    <!-- ===== 4. TIN NHẮN ===== -->
+    <section id="view-chat" class="view" hidden>
+      <h2 class="section-title">Tin nhắn Buyer ↔ Seller</h2>
+      <div class="thread-layout">
+        <div id="thread-list" class="thread-list"></div>
+        <div class="chat">
+          <h3 id="chat-title">Chọn một cuộc trò chuyện</h3>
+          <div id="messages" class="messages" aria-live="polite"></div>
+          <div id="chat-warning" class="alert" role="alert" hidden></div>
+          <form id="chat-form" class="chat-form">
+            <input id="chat-input" type="text" maxlength="500" placeholder="Nhập tin nhắn..." autocomplete="off" aria-label="Nội dung tin nhắn">
+            <button type="submit" class="btn">Gửi</button>
+          </form>
+          <p class="small muted">Hệ thống tự động chặn và cảnh báo khi phát hiện số điện thoại, Zalo, số tài khoản ngân hàng hoặc dấu hiệu giao dịch ngoài sàn.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 5. ĐĂNG DỊCH VỤ ===== -->
+    <section id="view-post" class="view" hidden>
+      <h2 class="section-title">Đăng dịch vụ của bạn</h2>
+      <p class="muted">Form tự thay đổi các trường theo danh mục bạn chọn.</p>
+      <form id="post-form" class="form-card" novalidate>
+        <label class="field"><span>Tiêu đề dịch vụ</span>
+          <input name="title" type="text" maxlength="120" required>
+        </label>
+        <label class="field"><span>Danh mục</span>
+          <select id="post-category" name="category"></select>
+        </label>
+        <label class="field"><span>Giá (đ)</span>
+          <input name="price" type="number" min="1000" step="1000" required>
+        </label>
+        <div id="post-extra"></div>
+        <label class="field"><span>Mô tả</span>
+          <textarea name="desc" rows="4" maxlength="1000"></textarea>
+        </label>
+        <button type="submit" class="btn">Đăng dịch vụ</button>
+      </form>
+    </section>
+
+    <!-- ===== 6. QUẢN TRỊ ===== -->
+    <section id="view-admin" class="view" hidden>
+      <h2 class="section-title">Quản trị</h2>
+      <p class="muted">Thống kê doanh thu, tiền giữ Escrow, cấu hình hoa hồng và xử lý khiếu nại.</p>
+
+      <div id="stats" class="stats"></div>
+
+      <h3>Tỷ lệ hoa hồng theo danh mục</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">Danh mục</th><th scope="col">Hoa hồng</th></tr>
+          </thead>
+          <tbody id="commission-table"></tbody>
+        </table>
+      </div>
+
+      <h3 class="section-title">Khiếu nại &amp; tranh chấp</h3>
+      <div id="disputes" class="stack"></div>
+
+      <div class="btn-row" style="margin-top:24px">
+        <button type="button" id="reset-data" class="btn ghost">Khôi phục dữ liệu mẫu</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== CHI TIẾT DỊCH VỤ + XEM THỬ CÓ WATERMARK ===== -->
+  <dialog id="detail-dialog" aria-labelledby="detail-title">
+    <div class="dialog-body">
+      <h2 id="detail-title"></h2>
+      <p id="detail-meta" class="muted small"></p>
+      <p id="detail-desc"></p>
+      <ul id="detail-info"></ul>
+      <h3>Xem thử</h3>
+      <div id="detail-preview"></div>
+      <div class="btn-row">
+        <button type="button" id="detail-buy" class="btn">Mua qua Escrow</button>
+        <button type="button" id="detail-close" class="btn ghost">Đóng</button>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-brand">EduMarket</p>
+        <p class="small">Sàn trung gian dịch vụ cho sinh viên. Thanh toán qua Escrow, nghiệm thu rồi mới giải ngân.</p>
+      </div>
+      <div>
+        <h4>Khám phá</h4>
+        <ul>
+          <li><a href="#market">Dịch vụ</a></li>
+          <li><a href="#forum">Diễn đàn</a></li>
+          <li><a href="#post">Đăng dịch vụ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hỗ trợ</h4>
+        <ul>
+          <li><a href="#orders">Đơn &amp; Escrow</a></li>
+          <li><a href="#chat">Tin nhắn</a></li>
+          <li><a href="#admin">Quản trị</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom muted">© 2026 EduMarket. Bản demo để học tập.</p>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
